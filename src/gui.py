@@ -205,6 +205,13 @@ class BuchungDialog(tk.Toplevel):
                 messagebox.showerror("Fehler", "Bitte füllen Sie alle Felder aus.")
                 return
             
+            # Validate date format
+            try:
+                datetime.strptime(datum, "%Y-%m-%d")
+            except ValueError:
+                messagebox.showerror("Fehler", "Ungültiges Datumsformat. Verwenden Sie YYYY-MM-DD (z.B. 2024-01-15).")
+                return
+            
             # Create or update booking
             if self.buchung:
                 # Update existing
