@@ -69,7 +69,7 @@ def check_libraries():
                 # Show popup message
                 messagebox.showwarning("Missing Libraries", message)
                 root.destroy()
-            except (tk.TclError, RuntimeError) as e:
+            except (tk.TclError, RuntimeError):
                 # If popup fails (e.g., no display), fall back to console
                 show_popup = False
         
