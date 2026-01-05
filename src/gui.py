@@ -9,7 +9,8 @@ from datetime import datetime
 from typing import Optional
 import os
 
-from buchung import Buchung, BuchungManager, KONTEN, get_konten_by_color
+from buchung import Buchung, BuchungManager
+from konten import get_konten_by_color
 from report import ReportGenerator
 from steuerberater import SteuerberaterExport
 
@@ -55,19 +56,14 @@ class KontoSelectionDialog(tk.Toplevel):
         
         # Add accounts grouped by color
         konten_by_color = get_konten_by_color()
-        colors = {
-            'blue': '#ADD8E6',    # Light blue
-            'green': '#90EE90',   # Light green
-            'orange': '#FFD580',  # Light orange
-            'red': '#FFB6C1'      # Light red
-        }
         
+        # Sort and display accounts by color
         for color, konten in sorted(konten_by_color.items()):
             for konto in sorted(konten):
                 self.listbox.insert(tk.END, konto)
-                # Color code the entry
+                # Use the color directly from JSON (hex format)
                 idx = self.listbox.size() - 1
-                self.listbox.itemconfig(idx, bg=colors.get(color, 'white'))
+                self.listbox.itemconfig(idx, bg=color)
         
         # Buttons
         button_frame = ttk.Frame(self)
