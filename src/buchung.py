@@ -159,15 +159,3 @@ def get_konten() -> Dict[str, str]:
         Dictionary mapping account strings to their category colors.
     """
     return get_konten_dict()
-
-
-# For backward compatibility, expose KONTEN as a lazily-loaded property
-KONTEN = None
-
-
-def _ensure_konten_loaded():
-    """Ensure KONTEN is loaded from JSON."""
-    global KONTEN
-    if KONTEN is None:
-        KONTEN = get_konten_dict()
-    return KONTEN
