@@ -4,6 +4,7 @@ Displays popup with installation instructions if any libraries are missing.
 """
 
 import sys
+import importlib.util
 
 
 def check_libraries():
@@ -18,10 +19,9 @@ def check_libraries():
 
     # Check each library
     for lib in required_libraries:
-        try:
-            __import__(lib)  # Try importing the library
-        except ImportError:
-            missing_libraries.append(lib)  # Add to missing list if ImportError is raised
+        # Use find_spec to check if module exists without importing it
+        if importlib.util.find_spec(lib) is None:
+            missing_libraries.append(lib)
 
     if missing_libraries:
         # Import tkinter for the popup (if available)
