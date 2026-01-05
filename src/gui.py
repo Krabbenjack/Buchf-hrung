@@ -102,7 +102,11 @@ class KontoSelectionDialog(tk.Toplevel):
             # Reconstruct the account string in the format "Name: Number"
             account_name = values[0]
             account_number = values[1]
-            self.result = f"{account_name}: {account_number}"
+            # Handle empty account number case
+            if account_number:
+                self.result = f"{account_name}: {account_number}"
+            else:
+                self.result = account_name
             self.destroy()
 
 
