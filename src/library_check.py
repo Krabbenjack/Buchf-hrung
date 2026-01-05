@@ -6,6 +6,14 @@ Displays popup with installation instructions if any libraries are missing.
 import sys
 import importlib.util
 
+# Required libraries for the booking application
+# Note: json is part of Python standard library and doesn't need checking
+# tkinter comes bundled with Python but may need system-level installation
+REQUIRED_LIBRARIES = ['pandas', 'openpyxl', 'reportlab', 'tkinter']
+
+# Libraries that can be installed via pip (excludes tkinter which is bundled)
+PIP_INSTALLABLE = ['pandas', 'openpyxl', 'reportlab']
+
 
 def check_libraries():
     """
@@ -14,11 +22,10 @@ def check_libraries():
     Returns:
         bool: True if all libraries are installed, False otherwise
     """
-    required_libraries = ['pandas', 'openpyxl', 'reportlab', 'tkinter']
     missing_libraries = []
 
     # Check each library
-    for lib in required_libraries:
+    for lib in REQUIRED_LIBRARIES:
         # Use find_spec to check if module exists without importing it
         if importlib.util.find_spec(lib) is None:
             missing_libraries.append(lib)
@@ -33,13 +40,21 @@ def check_libraries():
         except ImportError:
             pass  # tkinter not available, will use console output
         
+        # Separate pip-installable libraries from tkinter
+        missing_pip = [lib for lib in missing_libraries if lib in PIP_INSTALLABLE]
+        missing_tkinter = 'tkinter' in missing_libraries
+        
         # Create a message with missing libraries and installation instructions
         libraries = ', '.join(missing_libraries)
-        message = f"The following required libraries are missing: {libraries}.\n\n" \
-                  "To install the missing libraries, open a command prompt or terminal and run:\n\n" \
-                  "pip install pandas openpyxl reportlab\n\n" \
-                  "If you're missing tkinter, it is usually included with Python.\n" \
-                  "On Windows, you can install it by reinstalling Python from python.org."
+        message = f"The following required libraries are missing: {libraries}.\n\n"
+        
+        if missing_pip:
+            pip_command = f"pip install {' '.join(missing_pip)}"
+            message += f"To install the missing libraries, open a command prompt or terminal and run:\n\n{pip_command}\n\n"
+        
+        if missing_tkinter:
+            message += "If you're missing tkinter, it is usually included with Python.\n" \
+                      "On Windows, you can install it by reinstalling Python from python.org."
 
         if show_popup:
             try:
@@ -50,7 +65,7 @@ def check_libraries():
                 # Show popup message
                 messagebox.showwarning("Missing Libraries", message)
                 root.destroy()
-            except Exception:
+            except (tk.TclError, RuntimeError) as e:
                 # If popup fails (e.g., no display), fall back to console
                 show_popup = False
         
@@ -60,10 +75,13 @@ def check_libraries():
             print("ERROR: Missing Required Libraries")
             print("="*60)
             print(f"\nThe following required libraries are missing: {libraries}\n")
-            print("To install the missing libraries, open a command prompt or terminal and run:\n")
-            print("    pip install pandas openpyxl reportlab\n")
-            print("If you're missing tkinter, it is usually included with Python.")
-            print("On Windows, you can install it by reinstalling Python from python.org.\n")
+            if missing_pip:
+                pip_command = f"pip install {' '.join(missing_pip)}"
+                print("To install the missing libraries, open a command prompt or terminal and run:\n")
+                print(f"    {pip_command}\n")
+            if missing_tkinter:
+                print("If you're missing tkinter, it is usually included with Python.")
+                print("On Windows, you can install it by reinstalling Python from python.org.\n")
             print("="*60 + "\n")
         
         return False
