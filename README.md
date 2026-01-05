@@ -1,151 +1,213 @@
-# Buchführung - Booking Program
+Buchführung - Booking Program
 
-Ein Python-Projekt für die Verwaltung und Buchung von Finanzdaten für die jährliche Finanzabrechnung.
+A Python project for managing and booking financial data for the annual financial statement.
 
-## Übersicht
+Overview
 
-Das Buchführungsprogramm ist eine Desktop-Anwendung zur Verwaltung und Erfassung von Finanzdaten. Es bietet eine benutzerfreundliche grafische Oberfläche (GUI) für das Erstellen, Bearbeiten und Löschen von Buchungen, das Generieren von Monatsberichten und das Exportieren von Daten für den Steuerberater.
+The booking program is a desktop application for managing and recording financial data. It provides a user-friendly graphical interface (GUI) for creating, editing, and deleting bookings, generating monthly reports, and exporting data for the tax advisor.
 
-## Funktionen
+Features
+Core Features
 
-### Kernfunktionen
-- **Buchungen verwalten**: Erstellen, Bearbeiten und Löschen von Buchungen
-- **JSON-Speicherung**: Alle Buchungen werden in `data/buchungen.json` gespeichert
-- **Kontenauswahl**: Farbcodierte Kontenauswahl nach Gruppen
-- **Gegenkonten**: Dropdown-Menü zur Auswahl zwischen "1000 - Kasse" und "1200 - SPK"
-- **Monatliche Berichte**: Generierung von Monatsberichten mit Buchungsübersicht
-- **PDF-Export**: Export von Berichten als PDF-Dateien
-- **Steuerberater-Export**: Spezielle Exportfunktion für den Steuerberater mit Kontenbewegungen
+Manage Bookings: Create, edit, and delete bookings
 
-### Benutzeroberfläche
-- Übersichtliche Buchungsliste mit Sortierung nach Datum
-- Formular zur Eingabe neuer Buchungen
-- Farbcodierte Kontenauswahl (Blau, Grün, Orange, Rot)
-- Schaltflächen für Monatsbericht und Steuerberater-Export
+JSON Storage: All bookings are saved in data/buchungen.json
 
-## Projektstruktur
+Account Selection: Color-coded account selection by groups
 
-```
+Counter Accounts: Dropdown menu to choose between "1000 - Kasse" and "1200 - SPK"
+
+Monthly Reports: Generate monthly reports with booking summaries
+
+PDF Export: Export reports as PDF files
+
+Tax Advisor Export: Special export feature for the tax advisor with account movements
+
+User Interface
+
+Clear booking list sorted by date
+
+Form for entering new bookings
+
+Color-coded account selection (Blue, Green, Orange, Red)
+
+Buttons for monthly reports and tax advisor export
+
+Project Structure
 Buchf-hrung/
 ├── src/
-│   ├── main.py              # Einstiegspunkt der Anwendung
-│   ├── gui.py               # GUI-Komponenten und Dialoge
-│   ├── buchung.py           # Buchungsverwaltung und Datenmodell
-│   ├── report.py            # Berichtsgenerierung und PDF-Export
-│   └── steuerberater.py     # Steuerberater-Export
+│   ├── main.py              # Entry point of the application
+│   ├── gui.py               # GUI components and dialogs
+│   ├── buchung.py           # Booking management and data model
+│   ├── report.py            # Report generation and PDF export
+│   └── steuerberater.py     # Tax advisor export
 ├── data/
-│   └── buchungen.json       # JSON-Datenbank für Buchungen
-├── assets/                  # Statische Dateien (Icons, PDFs, etc.)
-├── requirements.txt         # Python-Abhängigkeiten
-├── README.md               # Diese Datei
-└── .gitignore              # Git-Ignore-Datei
-```
+│   └── buchungen.json       # JSON database for bookings
+├── assets/                  # Static files (icons, PDFs, etc.)
+├── requirements.txt         # Python dependencies
+├── README.md                # This file
+└── .gitignore               # Git ignore file
 
-## Installation
+Installation
+Prerequisites
 
-### Voraussetzungen
-- Python 3.8 oder höher
-- pip (Python Package Manager)
+Python 3.8 or higher
 
-### Schritte
+pip (Python Package Manager)
 
-1. Repository klonen:
-```bash
+Steps
+
+Clone the repository:
+
 git clone https://github.com/Krabbenjack/Buchf-hrung.git
 cd Buchf-hrung
-```
 
-2. Abhängigkeiten installieren:
-```bash
+
+Install the dependencies:
+
 pip install -r requirements.txt
-```
 
-## Verwendung
+Checking for Missing Libraries
 
-### Anwendung starten
+Upon opening the program, it will automatically check if the necessary libraries are installed. If any of the required libraries are missing, a popup window will inform you about the missing dependencies and provide instructions for installation.
 
-```bash
+The required libraries are:
+
+pandas: Used for data manipulation and importing/exporting Excel files.
+
+openpyxl: Required for reading and writing Excel files.
+
+reportlab: Used for generating PDF reports.
+
+json: Standard Python library for storing and loading booking data in JSON format.
+
+tkinter: Provides the graphical user interface (GUI) for interacting with the program.
+
+If any libraries are missing, the following instructions will be displayed in the popup:
+
+pip install pandas openpyxl reportlab
+
+
+In case tkinter is missing, you may need to reinstall Python with Tkinter included (usually bundled with Python).
+
+Usage
+Start the Application
 python src/main.py
-```
 
-### Buchung erstellen
+Create a Booking
 
-1. Klicken Sie auf "Neue Buchung"
-2. Füllen Sie das Formular aus:
-   - **Datum**: Format YYYY-MM-DD (z.B. 2024-01-15)
-   - **Beschreibung**: Beschreibung der Buchung
-   - **Konto**: Klicken Sie auf "Auswählen" für die farbcodierte Kontenauswahl
-   - **Gegenkonto**: Wählen Sie zwischen "1000 - Kasse" oder "1200 - SPK"
-   - **Soll**: Sollbetrag in Euro
-   - **Haben**: Habenbetrag in Euro
-3. Klicken Sie auf "Speichern"
+Click "New Booking"
 
-### Buchung bearbeiten
+Fill out the form:
 
-1. Doppelklicken Sie auf eine Buchung in der Liste oder
-2. Wählen Sie eine Buchung aus und klicken Sie auf "Bearbeiten"
-3. Ändern Sie die gewünschten Felder
-4. Klicken Sie auf "Speichern"
+Date: Format YYYY-MM-DD (e.g., 2024-01-15)
 
-### Buchung löschen
+Description: Description of the booking
 
-1. Wählen Sie eine Buchung aus der Liste
-2. Klicken Sie auf "Löschen"
-3. Bestätigen Sie die Löschung
+Account: Click "Select" for the color-coded account selection
 
-### Monatsbericht erstellen
+Counter Account: Choose between "1000 - Kasse" or "1200 - SPK"
 
-1. Klicken Sie auf "Monatsbericht"
-2. Geben Sie Jahr und Monat ein
-3. Klicken Sie auf "Erstellen"
-4. Wählen Sie einen Speicherort für die PDF-Datei
+Debit: Debit amount in EUR
 
-Der Monatsbericht enthält:
-- Gesamtanzahl der Buchungen
-- Gesamt Soll und Haben
-- Saldo
-- Detaillierte Buchungsliste
+Credit: Credit amount in EUR
 
-### Steuerberater-Export
+Click "Save"
 
-1. Klicken Sie auf "Steuerberater Export"
-2. Geben Sie Jahr und Monat ein
-3. Klicken Sie auf "Exportieren"
-4. Wählen Sie einen Speicherort für die PDF-Datei
+Edit a Booking
 
-Der Steuerberater-Export enthält:
-- Übersicht mit Anzahl Buchungen und Summen
-- Kontenbewegungen (Soll, Haben, Saldo pro Konto)
-- Detaillierte Buchungsliste
+Double-click on a booking in the list or
 
-## Kontenplan
+Select a booking and click "Edit"
 
-Die Anwendung verwendet folgende Standardkonten:
+Modify the desired fields
 
-### Bankkonten (Blau)
-- 1000 - Kasse
-- 1200 - SPK
-- 1800 - Bank
+Click "Save"
 
-### Erlöskonten (Grün)
-- 4000 - Erlöse
-- 4100 - Sonstige Erlöse
+Delete a Booking
 
-### Steuerkonten (Orange)
-- 4900 - Umsatzsteuer
+Select a booking from the list
 
-### Kostenkonten (Rot)
-- 6000 - Wareneinkauf
-- 6300 - Fremdleistungen
-- 6800 - Sonstige Kosten
-- 6820 - Versicherungen
-- 6850 - Büromaterial
+Click "Delete"
 
-## Datenformat
+Confirm deletion
 
-Buchungen werden als JSON-Array in `data/buchungen.json` gespeichert:
+Generate Monthly Report
 
-```json
+Click "Monthly Report"
+
+Enter the year and month
+
+Click "Create"
+
+Choose a location to save the PDF file
+
+The monthly report includes:
+
+Total number of bookings
+
+Total debit and credit
+
+Balance
+
+Detailed list of bookings
+
+Export for Tax Advisor
+
+Click "Tax Advisor Export"
+
+Enter the year and month
+
+Click "Export"
+
+Choose a location to save the PDF file
+
+The tax advisor export includes:
+
+Overview with the number of bookings and totals
+
+Account movements (debit, credit, balance per account)
+
+Detailed list of bookings
+
+Accounts Plan
+
+The application uses the following standard accounts:
+
+Bank Accounts (Blue)
+
+1000 - Kasse
+
+1200 - SPK
+
+1800 - Bank
+
+Revenue Accounts (Green)
+
+4000 - Erlöse
+
+4100 - Sonstige Erlöse
+
+Tax Accounts (Orange)
+
+4900 - Umsatzsteuer
+
+Expense Accounts (Red)
+
+6000 - Wareneinkauf
+
+6300 - Fremdleistungen
+
+6800 - Sonstige Kosten
+
+6820 - Versicherungen
+
+6850 - Büromaterial
+
+Data Format
+
+Bookings are saved as a JSON array in data/buchungen.json:
+
 [
   {
     "id": "20240115120000000000",
@@ -157,46 +219,57 @@ Buchungen werden als JSON-Array in `data/buchungen.json` gespeichert:
     "haben": 0.0
   }
 ]
-```
 
-## Entwicklung
+Development
+Modules
+buchung.py
 
-### Module
+Buchung: Data model for a booking
 
-#### buchung.py
-- `Buchung`: Datenmodell für eine Buchung
-- `BuchungManager`: Verwaltung aller Buchungen und JSON-Speicherung
-- `KONTEN`: Standardkontenliste mit Farbzuordnung
+BuchungManager: Manages all bookings and JSON storage
 
-#### gui.py
-- `BuchfuehrungGUI`: Hauptfenster der Anwendung
-- `BuchungDialog`: Dialog zum Erstellen/Bearbeiten von Buchungen
-- `KontoSelectionDialog`: Farbcodierte Kontenauswahl
+KONTEN: Standard account list with color coding
 
-#### report.py
-- `ReportGenerator`: Generierung von Monatsberichten
-- PDF-Export von Berichten mit Buchungsdetails
+gui.py
 
-#### steuerberater.py
-- `SteuerberaterExport`: Spezielle Exportfunktion für Steuerberater
-- Kontenbewegungen und Buchungszusammenfassungen
+BuchfuehrungGUI: Main window of the application
 
-### Tests
+BuchungDialog: Dialog for creating/editing bookings
 
-Die Anwendung kann manuell getestet werden:
-1. Buchungen erstellen, bearbeiten und löschen
-2. Monatsbericht für verschiedene Monate generieren
-3. Steuerberater-Export erstellen
-4. Datenpersistenz überprüfen (Neustart der Anwendung)
+KontoSelectionDialog: Color-coded account selection
 
-## Lizenz
+report.py
 
-Siehe LICENSE-Datei für Details.
+ReportGenerator: Generates monthly reports
 
-## Autor
+PDF export of reports with booking details
+
+steuerberater.py
+
+SteuerberaterExport: Special export function for the tax advisor
+
+Account movements and booking summaries
+
+Tests
+
+The application can be manually tested:
+
+Create, edit, and delete bookings
+
+Generate monthly reports for different months
+
+Generate tax advisor export
+
+Verify data persistence (restarting the application)
+
+License
+
+See LICENSE file for details.
+
+Author
 
 Krabbenjack
 
-## Mitwirken
+Contributing
 
-Beiträge sind willkommen! Bitte erstellen Sie einen Pull Request oder öffnen Sie ein Issue für Verbesserungsvorschläge oder Fehlermeldungen.
+Contributions are welcome! Please create a pull request or open an issue for suggestions or bug reports.
