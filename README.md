@@ -13,7 +13,7 @@ Manage Bookings: Create, edit, and delete bookings
 
 JSON Storage: All bookings are saved in data/buchungen.json
 
-Account Selection: Color-coded account selection by groups
+Account Selection: Color-coded account selection by groups (dynamically loaded from Konten.json)
 
 Counter Accounts: Dropdown menu to choose between "1000 - Kasse" and "1200 - SPK"
 
@@ -29,7 +29,7 @@ Clear booking list sorted by date
 
 Form for entering new bookings
 
-Color-coded account selection (Blue, Green, Orange, Red)
+Color-coded account selection (colors defined in Konten.json)
 
 Buttons for monthly reports and tax advisor export
 
@@ -39,10 +39,12 @@ Buchf-hrung/
 │   ├── main.py              # Entry point of the application
 │   ├── gui.py               # GUI components and dialogs
 │   ├── buchung.py           # Booking management and data model
+│   ├── konten.py            # Account management - loads from Konten.json
 │   ├── report.py            # Report generation and PDF export
 │   └── steuerberater.py     # Tax advisor export
 ├── data/
-│   └── buchungen.json       # JSON database for bookings
+│   ├── buchungen.json       # JSON database for bookings
+│   └── Konten.json          # Account definitions with categories and colors
 ├── assets/                  # Static files (icons, PDFs, etc.)
 ├── requirements.txt         # Python dependencies
 ├── README.md                # This file
@@ -172,37 +174,22 @@ Detailed list of bookings
 
 Accounts Plan
 
-The application uses the following standard accounts:
+The application dynamically loads accounts from `data/Konten.json`, which contains over 100 accounts organized in 12 categories:
 
-Bank Accounts (Blue)
+- **Anlagen** (Assets): EDV-Software, Maschinen, PKW, etc.
+- **Finanzen** (Finance): Kasse, SPK, Darlehen, Umsatzsteuer, etc.
+- **Privat** (Private): Privat, Einkommensteuer, Krankenversicherung, etc.
+- **Erträge** (Revenue): Privat-Einlagen, Zins-Erträge, etc.
+- **Material** (Materials): Roh-Hilfs-Betriebsstoffe, Fremdleistungen, etc.
+- **Löhne** (Wages): Löhne und Gehälter, Soziale Aufwendungen, etc.
+- **Miete** (Rent): Miete Geschäftsräume, Gas/Strom/Wasser, etc.
+- **Fahrzeug** (Vehicle): Fahrzeugkosten, Kfz-Steuer, Benzin, etc.
+- **Werbung** (Advertising): Werbekosten, Bewirtung, Reisekosten, etc.
+- **Allgemein** (General): Porto, Telefon, Bürobedarf, etc.
+- **Serviceleistungen** (Services): Klavierstimmungen, Reparaturen, etc.
+- **Verkäufe** (Sales): Kfz-Verkäufe, Anlagen-Verkäufe
 
-1000 - Kasse
-
-1200 - SPK
-
-1800 - Bank
-
-Revenue Accounts (Green)
-
-4000 - Erlöse
-
-4100 - Sonstige Erlöse
-
-Tax Accounts (Orange)
-
-4900 - Umsatzsteuer
-
-Expense Accounts (Red)
-
-6000 - Wareneinkauf
-
-6300 - Fremdleistungen
-
-6800 - Sonstige Kosten
-
-6820 - Versicherungen
-
-6850 - Büromaterial
+Each category has an associated color for visual grouping in the GUI. You can add or modify accounts by editing the `data/Konten.json` file.
 
 Data Format
 
@@ -228,7 +215,15 @@ Buchung: Data model for a booking
 
 BuchungManager: Manages all bookings and JSON storage
 
-KONTEN: Standard account list with color coding
+konten.py
+
+load_konten(): Loads accounts from data/Konten.json
+
+get_konten_by_color(): Returns accounts grouped by category color
+
+get_all_konten_list(): Returns flat list of all accounts
+
+get_konten_dict(): Returns accounts dictionary for backward compatibility
 
 gui.py
 
@@ -236,7 +231,7 @@ BuchfuehrungGUI: Main window of the application
 
 BuchungDialog: Dialog for creating/editing bookings
 
-KontoSelectionDialog: Color-coded account selection
+KontoSelectionDialog: Color-coded account selection (colors from Konten.json)
 
 report.py
 

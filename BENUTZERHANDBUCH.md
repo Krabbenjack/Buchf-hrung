@@ -70,11 +70,11 @@ Die Hauptoberfläche besteht aus:
 3. Klicken Sie auf **"Speichern"**
 
 #### Kontenauswahl
-Die Konten sind farbcodiert nach Gruppen:
-- **Blau**: Bankkonten (Kasse, SPK, Bank)
-- **Grün**: Erlöskonten
-- **Orange**: Steuerkonten
-- **Rot**: Kostenkonten
+Die Konten werden dynamisch aus der Datei `data/Konten.json` geladen und sind farbcodiert nach Kategorien:
+- **#A7C7E7** (Hellblau): Anlagen, Finanzen, Material, Miete, Fahrzeug, Werbung, Allgemein, Serviceleistungen, Verkäufe
+- **#A7E7A7** (Hellgrün): Privat, Erträge, Löhne
+
+Die Anwendung unterstützt über 100 verschiedene Konten aus 12 Kategorien.
 
 ### Buchung bearbeiten
 
@@ -133,20 +133,42 @@ Die Konten sind farbcodiert nach Gruppen:
 ## Häufig gestellte Fragen
 
 ### Wo werden die Daten gespeichert?
-Alle Buchungen werden in der Datei `data/buchungen.json` gespeichert. Diese Datei wird automatisch erstellt und aktualisiert.
+Alle Buchungen werden in der Datei `data/buchungen.json` gespeichert. Die Kontendefinitionen werden aus `data/Konten.json` geladen. Diese Dateien werden automatisch verwendet.
 
 ### Kann ich die Daten sichern?
-Ja, kopieren Sie einfach die Datei `data/buchungen.json` an einen sicheren Ort. Um eine Sicherung wiederherzustellen, ersetzen Sie die aktuelle Datei durch die gesicherte Version.
+Ja, kopieren Sie einfach die Dateien `data/buchungen.json` und `data/Konten.json` an einen sicheren Ort. Um eine Sicherung wiederherzustellen, ersetzen Sie die aktuellen Dateien durch die gesicherten Versionen.
 
 ### Welche Konten sind verfügbar?
-Die Standardkonten sind:
-- **Bankkonten**: 1000 - Kasse, 1200 - SPK, 1800 - Bank
-- **Erlöskonten**: 4000 - Erlöse, 4100 - Sonstige Erlöse
-- **Steuerkonten**: 4900 - Umsatzsteuer
-- **Kostenkonten**: 6000 - Wareneinkauf, 6300 - Fremdleistungen, 6800 - Sonstige Kosten, 6820 - Versicherungen, 6850 - Büromaterial
+Die Konten werden dynamisch aus `data/Konten.json` geladen. Die Datei enthält über 100 Konten in 12 Kategorien:
+- **Anlagen**: EDV-Software, Maschinen, PKW, Büroeinrichtung, etc.
+- **Finanzen**: Kasse, SPK, Darlehen, Vorsteuer, Umsatzsteuer, etc.
+- **Privat**: Privat, Einkommensteuer, Krankenversicherung, etc.
+- **Erträge**: Privat-Einlagen, Zins-Erträge, Sonstige Erlöse, etc.
+- **Material**: Roh-Hilfs-Betriebsstoffe, Fremdleistungen, Wareneingang, etc.
+- **Löhne**: Löhne und Gehälter, Soziale Aufwendungen, etc.
+- **Miete**: Miete Geschäftsräume, Gas/Strom/Wasser, etc.
+- **Fahrzeug**: Fahrzeugkosten, Kfz-Steuer, Benzin, etc.
+- **Werbung**: Werbekosten, Bewirtung, Reisekosten, etc.
+- **Allgemein**: Porto, Telefon, Bürobedarf, Rechts- und Beratungskosten, etc.
+- **Serviceleistungen**: Klavierstimmungen, Reparaturen, Transporte, etc.
+- **Verkäufe**: Kfz-Verkäufe, Anlagen-Verkäufe
+
+Eine vollständige Liste finden Sie in der Datei `data/Konten.json`.
 
 ### Kann ich eigene Konten hinzufügen?
-Ja, Sie können die Kontenliste in der Datei `src/buchung.py` anpassen. Suchen Sie nach dem `KONTEN` Dictionary und fügen Sie neue Konten hinzu.
+Ja, Sie können neue Konten in der Datei `data/Konten.json` hinzufügen. Fügen Sie sie zu einer bestehenden Kategorie hinzu oder erstellen Sie eine neue Kategorie mit eigener Farbe. Die Änderungen werden beim nächsten Start der Anwendung automatisch übernommen.
+
+Beispielstruktur in `Konten.json`:
+```json
+{
+  "Kategoriename": {
+    "farbe": "#RRGGBB",
+    "konten": {
+      "Kontoname": Kontonummer
+    }
+  }
+}
+```
 
 ### Was ist der Unterschied zwischen Soll und Haben?
 - **Soll**: Ausgaben oder Kosten (z.B., Einkauf von Waren)
@@ -159,7 +181,7 @@ Die Buchungsliste ist standardmäßig nach Datum sortiert (neueste zuerst).
 Nein, Buchungen können nur einzeln gelöscht werden. Dies ist eine Sicherheitsmaßnahme, um versehentliches Löschen zu verhindern.
 
 ### Was passiert, wenn ich das Programm schließe?
-Alle Buchungen werden automatisch in `data/buchungen.json` gespeichert und sind beim nächsten Start wieder verfügbar.
+Alle Buchungen werden automatisch in `data/buchungen.json` gespeichert und sind beim nächsten Start wieder verfügbar. Die Kontendefinitionen werden aus `data/Konten.json` geladen.
 
 ### Wie kann ich die Anwendung aktualisieren?
 ```bash
