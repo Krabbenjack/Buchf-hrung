@@ -40,30 +40,47 @@ class KontoSelectionDialog(tk.Toplevel):
         frame = ttk.Frame(self)
         frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
         
-        # Create scrollable listbox
+        # Create scrollable treeview with columns
         scrollbar = ttk.Scrollbar(frame)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
-        self.listbox = tk.Listbox(
-            frame,
-            yscrollcommand=scrollbar.set,
-            font=('Arial', 10),
-            selectmode=tk.SINGLE,
-            height=20
-        )
-        self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.config(command=self.listbox.yview)
+        # Define columns
+        columns = ('Account Name', 'Account Number')
+        self.treeview = ttk.Treeview(frame, columns=columns, show='headings', yscrollcommand=scrollbar.set)
+        
+        # Configure column headings
+        self.treeview.heading('Account Name', text='Account Name')
+        self.treeview.heading('Account Number', text='Account Number')
+        
+        # Configure column widths
+        self.treeview.column('Account Name', width=250)
+        self.treeview.column('Account Number', width=100)
+        
+        self.treeview.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.config(command=self.treeview.yview)
         
         # Add accounts grouped by color
         konten_by_color = get_konten_by_color()
         
+        # Configure tags for each color
+        for color in konten_by_color.keys():
+            # Remove the '#' and use the color hex as tag name
+            tag_name = color.lstrip('#')
+            self.treeview.tag_configure(tag_name, background=color)
+        
         # Sort and display accounts by color
         for color, konten in sorted(konten_by_color.items()):
             for konto in sorted(konten):
-                self.listbox.insert(tk.END, konto)
-                # Use the color directly from JSON (hex format)
-                idx = self.listbox.size() - 1
-                self.listbox.itemconfig(idx, bg=color)
+                # Split account string into name and number
+                if ': ' in konto:
+                    account_name, account_number = konto.split(': ', 1)
+                else:
+                    account_name = konto
+                    account_number = ''
+                
+                # Use color hex (without #) as tag
+                tag_name = color.lstrip('#')
+                self.treeview.insert('', tk.END, values=(account_name, account_number), tags=(tag_name,))
         
         # Buttons
         button_frame = ttk.Frame(self)
@@ -73,13 +90,19 @@ class KontoSelectionDialog(tk.Toplevel):
         ttk.Button(button_frame, text="Abbrechen", command=self.destroy).pack(side=tk.LEFT, padx=5)
         
         # Bind double-click
-        self.listbox.bind('<Double-Button-1>', lambda e: self._on_select())
+        self.treeview.bind('<Double-Button-1>', lambda e: self._on_select())
     
     def _on_select(self):
         """Handle account selection."""
-        selection = self.listbox.curselection()
+        selection = self.treeview.selection()
         if selection:
-            self.result = self.listbox.get(selection[0])
+            # Get the values from the selected item
+            item = selection[0]
+            values = self.treeview.item(item)['values']
+            # Reconstruct the account string in the format "Name: Number"
+            account_name = values[0]
+            account_number = values[1]
+            self.result = f"{account_name}: {account_number}"
             self.destroy()
 
 
