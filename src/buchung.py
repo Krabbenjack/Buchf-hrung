@@ -8,6 +8,19 @@ import os
 from datetime import datetime
 from typing import List, Dict, Optional
 
+# Import account loading functions from konten module
+try:
+    from konten import get_konten_by_color, get_konten_dict
+except ImportError:
+    # Fallback for when konten module is not available
+    def get_konten_by_color() -> Dict[str, List[str]]:
+        """Fallback implementation."""
+        return {}
+    
+    def get_konten_dict() -> Dict[str, str]:
+        """Fallback implementation."""
+        return {}
+
 
 class Buchung:
     """Represents a single financial booking entry."""
@@ -137,27 +150,12 @@ class BuchungManager:
         return self.buchungen
 
 
-# Standard account list with color groups
-KONTEN = {
-    '1000 - Kasse': 'blue',
-    '1200 - SPK': 'blue',
-    '1800 - Bank': 'blue',
-    '4000 - Erlöse': 'green',
-    '4100 - Sonstige Erlöse': 'green',
-    '4900 - Umsatzsteuer': 'orange',
-    '6000 - Wareneinkauf': 'red',
-    '6300 - Fremdleistungen': 'red',
-    '6800 - Sonstige Kosten': 'red',
-    '6820 - Versicherungen': 'red',
-    '6850 - Büromaterial': 'red',
-}
-
-
-def get_konten_by_color() -> Dict[str, List[str]]:
-    """Get accounts grouped by color."""
-    grouped = {}
-    for konto, color in KONTEN.items():
-        if color not in grouped:
-            grouped[color] = []
-        grouped[color].append(konto)
-    return grouped
+# Maintain backward compatibility by providing KONTEN as a function
+def get_konten() -> Dict[str, str]:
+    """
+    Get accounts dictionary for backward compatibility.
+    
+    Returns:
+        Dictionary mapping account strings to their category colors.
+    """
+    return get_konten_dict()
