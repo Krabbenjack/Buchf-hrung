@@ -7,7 +7,9 @@ import sys
 import importlib.util
 
 # Required libraries for the booking application
-# Note: json is part of Python standard library and doesn't need checking
+# Note: 'json' is part of Python standard library and doesn't need verification
+# pandas and openpyxl are required for future Excel import/export functionality
+# reportlab is required for PDF generation
 # tkinter comes bundled with Python but may need system-level installation
 REQUIRED_LIBRARIES = ['pandas', 'openpyxl', 'reportlab', 'tkinter']
 
@@ -54,7 +56,9 @@ def check_libraries():
         
         if missing_tkinter:
             message += "If you're missing tkinter, it is usually included with Python.\n" \
-                      "On Windows, you can install it by reinstalling Python from python.org."
+                      "On Windows, reinstall Python from python.org.\n" \
+                      "On Linux (Ubuntu/Debian), run: sudo apt-get install python3-tk\n" \
+                      "On macOS, reinstall Python using the official installer or Homebrew."
 
         if show_popup:
             try:
@@ -81,7 +85,9 @@ def check_libraries():
                 print(f"    {pip_command}\n")
             if missing_tkinter:
                 print("If you're missing tkinter, it is usually included with Python.")
-                print("On Windows, you can install it by reinstalling Python from python.org.\n")
+                print("  On Windows: Reinstall Python from python.org")
+                print("  On Linux (Ubuntu/Debian): sudo apt-get install python3-tk")
+                print("  On macOS: Reinstall Python using the official installer or Homebrew\n")
             print("="*60 + "\n")
         
         return False
