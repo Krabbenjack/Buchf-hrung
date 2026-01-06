@@ -34,21 +34,24 @@ Color-coded account selection (colors defined in Konten.json)
 Buttons for monthly reports and tax advisor export
 
 Project Structure
-Buchf-hrung/
+```
+Buchführung/
 ├── src/
-│   ├── main.py              # Entry point of the application
-│   ├── gui.py               # GUI components and dialogs
-│   ├── buchung.py           # Booking management and data model
-│   ├── konten.py            # Account management - loads from Konten.json
+│   ├── main.py              # Application entry point
+│   ├── ui.py                # All Tkinter UI components
+│   ├── buchung.py           # Booking logic and data persistence
+│   ├── konten_loader.py     # Account loading from JSON
+│   ├── library_check.py     # Dependency checker
 │   ├── report.py            # Report generation and PDF export
 │   └── steuerberater.py     # Tax advisor export
 ├── data/
 │   ├── buchungen.json       # JSON database for bookings
-│   └── Konten.json          # Account definitions with categories and colors
+│   └── konten.json          # Account definitions with categories and colors
 ├── assets/                  # Static files (icons, PDFs, etc.)
 ├── requirements.txt         # Python dependencies
 ├── README.md                # This file
 └── .gitignore               # Git ignore file
+```
 
 Installation
 Prerequisites
@@ -174,7 +177,7 @@ Detailed list of bookings
 
 Accounts Plan
 
-The application dynamically loads accounts from `data/Konten.json`, which contains over 100 accounts organized in 12 categories:
+The application dynamically loads accounts from `data/konten.json`, which contains over 100 accounts organized in 18 categories:
 
 - **Anlagen** (Assets): EDV-Software, Maschinen, PKW, etc.
 - **Finanzen** (Finance): Kasse, SPK, Darlehen, Umsatzsteuer, etc.
@@ -183,13 +186,19 @@ The application dynamically loads accounts from `data/Konten.json`, which contai
 - **Material** (Materials): Roh-Hilfs-Betriebsstoffe, Fremdleistungen, etc.
 - **Löhne** (Wages): Löhne und Gehälter, Soziale Aufwendungen, etc.
 - **Miete** (Rent): Miete Geschäftsräume, Gas/Strom/Wasser, etc.
+- **Steuern** (Taxes): Gewerbesteuer, etc.
+- **Versicherung** (Insurance): Versicherungen, Beiträge zu Verbänden, etc.
 - **Fahrzeug** (Vehicle): Fahrzeugkosten, Kfz-Steuer, Benzin, etc.
-- **Werbung** (Advertising): Werbekosten, Bewirtung, Reisekosten, etc.
+- **Werbung** (Advertising): Werbekosten, Bewirtung, etc.
+- **Reisen** (Travel): Reisekosten, etc.
 - **Allgemein** (General): Porto, Telefon, Bürobedarf, etc.
+- **Fortbildung** (Training): Zeitschriften, Fortbildung, etc.
+- **Beratung** (Consulting): Rechts- und Beratungskosten, Buchführungskosten, etc.
+- **Betrieb** (Operations): Betriebsbedarf, Werkzeuge, etc.
 - **Serviceleistungen** (Services): Klavierstimmungen, Reparaturen, etc.
 - **Verkäufe** (Sales): Kfz-Verkäufe, Anlagen-Verkäufe
 
-Each category has an associated color for visual grouping in the GUI. You can add or modify accounts by editing the `data/Konten.json` file.
+Each category has an associated color for visual grouping in the GUI. You can add or modify accounts by editing the `data/konten.json` file.
 
 Data Format
 
@@ -209,41 +218,37 @@ Bookings are saved as a JSON array in data/buchungen.json:
 
 Development
 Modules
-buchung.py
+**buchung.py**
+- `Buchung`: Data model class for a booking
+- `BuchungManager`: Manages all bookings and JSON storage
+- Methods: `load_buchungen()`, `save_buchungen()`, `get_current_buchung()`, `save_current_buchung()`, `navigate_previous()`, `navigate_next()`, `get_buchungen_by_month()`, `get_buchungen_by_year()`
 
-Buchung: Data model for a booking
+**konten_loader.py**
+- `load_konten()`: Loads accounts from data/konten.json
+- `get_all_accounts()`: Returns flat list of all accounts
+- `get_accounts_by_group()`: Returns accounts for a specific group
+- `get_group_color()`: Returns the color for a specific group
+- `get_all_groups()`: Returns list of all group names
 
-BuchungManager: Manages all bookings and JSON storage
+**ui.py**
+- `BuchungUI`: Main UI window with all Tkinter components
+- `create_widgets()`: Creates all UI elements (labels, entries, buttons)
+- `open_konto_selector()`: Opens color-coded account selection popup
+- `show_current_buchung()`: Displays current booking in UI
+- `save_buchung()`: Saves current booking
+- `prev_buchung()`, `next_buchung()`: Navigation methods
 
-konten.py
+**library_check.py**
+- `check_libraries()`: Checks if all required dependencies are installed
+- Shows popup or console message with installation instructions if libraries are missing
 
-load_konten(): Loads accounts from data/Konten.json
+**report.py**
+- `ReportGenerator`: Generates monthly reports
+- PDF export of reports with booking details
 
-get_konten_by_color(): Returns accounts grouped by category color
-
-get_all_konten_list(): Returns flat list of all accounts
-
-get_konten_dict(): Returns accounts dictionary for backward compatibility
-
-gui.py
-
-BuchfuehrungGUI: Main window of the application
-
-BuchungDialog: Dialog for creating/editing bookings
-
-KontoSelectionDialog: Color-coded account selection (colors from Konten.json)
-
-report.py
-
-ReportGenerator: Generates monthly reports
-
-PDF export of reports with booking details
-
-steuerberater.py
-
-SteuerberaterExport: Special export function for the tax advisor
-
-Account movements and booking summaries
+**steuerberater.py**
+- `SteuerberaterExport`: Special export function for the tax advisor
+- Account movements and booking summaries
 
 Tests
 
