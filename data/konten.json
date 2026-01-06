@@ -1,6 +1,6 @@
 {
   "Anlagen": {
-    "color": "#A7C7E7",
+    "color": "lightblue",
     "accounts": [
       { "nummer": 27, "bezeichnung": "EDV - Software" },
       { "nummer": 165, "bezeichnung": "Umbau gemieter Räume" },
@@ -14,7 +14,7 @@
     ]
   },
   "Finanzen": {
-    "color": "#90EE90",
+    "color": "lightgreen",
     "accounts": [
       { "nummer": 711, "bezeichnung": "Darlehn J.W." },
       { "nummer": 1000, "bezeichnung": "Kasse (nur Gegenkonto)" },
@@ -41,7 +41,7 @@
     ]
   },
   "Privat": {
-    "color": "#FFFFE0",
+    "color": "lightyellow",
     "accounts": [
       { "nummer": 1790, "bezeichnung": "Ust Vorjahr" },
       { "nummer": 1800, "bezeichnung": "Privat" },
@@ -53,7 +53,7 @@
     ]
   },
   "Erträge": {
-    "color": "#E0FFFF",
+    "color": "lightcyan",
     "accounts": [
       { "nummer": 1890, "bezeichnung": "Privat-Einlagen" },
       { "nummer": 2100, "bezeichnung": "Zins-Aufwendungen" },
@@ -65,7 +65,7 @@
     ]
   },
   "Material": {
-    "color": "#FFB6C1",
+    "color": "lightpink",
     "accounts": [
       { "nummer": 3000, "bezeichnung": "Roh-Hilfs-Betriebsstoffe" },
       { "nummer": 3001, "bezeichnung": "Kleinmaterial" },
@@ -77,7 +77,7 @@
     ]
   },
   "Löhne": {
-    "color": "#FFA500",
+    "color": "orange",
     "accounts": [
       { "nummer": 4100, "bezeichnung": "Löhne u. Gehälter" },
       { "nummer": 4101, "bezeichnung": "Lohnsteuer" },
@@ -88,7 +88,7 @@
     ]
   },
   "Miete": {
-    "color": "#EE82EE",
+    "color": "violet",
     "accounts": [
       { "nummer": 4190, "bezeichnung": "Aushilfslöhne" },
       { "nummer": 4210, "bezeichnung": "Miete Geschäftsräume" },
@@ -97,20 +97,20 @@
     ]
   },
   "Steuern": {
-    "color": "#EE82EE",
+    "color": "violet",
     "accounts": [
       { "nummer": 4320, "bezeichnung": "Gewerbesteuer" }
     ]
   },
   "Versicherung": {
-    "color": "#D3D3D3",
+    "color": "lightgray",
     "accounts": [
       { "nummer": 4360, "bezeichnung": "Versicherungen" },
       { "nummer": 4380, "bezeichnung": "Beiträge zu Verbänden usw." }
     ]
   },
   "Fahrzeug": {
-    "color": "#D3D3D3",
+    "color": "lightgray",
     "accounts": [
       { "nummer": 4500, "bezeichnung": "Fahrzeugkosten" },
       { "nummer": 4510, "bezeichnung": "Kfz.-Steuer" },
@@ -121,7 +121,7 @@
     ]
   },
   "Werbung": {
-    "color": "#D3D3D3",
+    "color": "lightgray",
     "accounts": [
       { "nummer": 4610, "bezeichnung": "Werbekosten" },
       { "nummer": 4611, "bezeichnung": "Anzeigenwerbung" },
@@ -133,14 +133,14 @@
     ]
   },
   "Reisen": {
-    "color": "#D3D3D3",
+    "color": "lightgray",
     "accounts": [
       { "nummer": 4660, "bezeichnung": "Reisekosten - Arbeitnehmer" },
       { "nummer": 4670, "bezeichnung": "Reisekosten - Unternehmer" }
     ]
   },
   "Allgemein": {
-    "color": "#F5DEB3",
+    "color": "wheat",
     "accounts": [
       { "nummer": 4730, "bezeichnung": "Ausgangsfrachten" },
       { "nummer": 4760, "bezeichnung": "Verkaufsprovisionen" },
@@ -151,14 +151,14 @@
     ]
   },
   "Fortbildung": {
-    "color": "#F5DEB3",
+    "color": "wheat",
     "accounts": [
       { "nummer": 4940, "bezeichnung": "Zeitschriften (80)" },
       { "nummer": 4945, "bezeichnung": "Fortbildung (90)" }
     ]
   },
   "Beratung": {
-    "color": "#F5DEB3",
+    "color": "wheat",
     "accounts": [
       { "nummer": 4950, "bezeichnung": "Rechts- und Beratungskosten" },
       { "nummer": 4955, "bezeichnung": "Buchführungskosten" },
@@ -166,14 +166,14 @@
     ]
   },
   "Betrieb": {
-    "color": "#F5DEB3",
+    "color": "wheat",
     "accounts": [
       { "nummer": 4980, "bezeichnung": "Betriebsbedarf" },
       { "nummer": 4985, "bezeichnung": "Werkzeuge und Kleingeräte" }
     ]
   },
   "Serviceleistungen": {
-    "color": "#FF0000",
+    "color": "red",
     "accounts": [
       { "nummer": 8100, "bezeichnung": "Mwst-freie Umsätze" },
       { "nummer": 8200, "bezeichnung": "Klav.Stmg. Ohne Mwst." },
@@ -186,7 +186,7 @@
     ]
   },
   "Verkäufe": {
-    "color": "#FFD700",
+    "color": "gold",
     "accounts": [
       { "nummer": 8800, "bezeichnung": "Kfz.Verkäufe" },
       { "nummer": 8820, "bezeichnung": "Anlagen - Verkäufe" }
