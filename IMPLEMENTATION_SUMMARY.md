@@ -3,7 +3,122 @@
 ## Project Overview
 Complete booking program (Buchführungsprogramm) for managing and recording financial data for annual financial statements. Implemented with Python and tkinter GUI.
 
-## Implementation Status: ✅ COMPLETE
+## Recent Refactoring (January 6, 2026)
+
+### Refactoring Objectives
+The application has been refactored to achieve:
+1. **Clean Architecture**: Separation of UI, business logic, and data access
+2. **Data-Driven Design**: Convert Python module (konten.py) to JSON data file
+3. **Maintainability**: Modular structure with clear responsibilities
+4. **Preservation**: All existing functionality maintained
+
+### Changes Made
+
+#### File Structure Transformation
+**Before:**
+```
+src/
+├── buchung.py     # Mixed UI and logic
+├── ...
+data/
+├── konten.py      # Python module with account data
+```
+
+**After:**
+```
+src/
+├── main.py              # Application entry point
+├── ui.py                # All Tkinter UI code
+├── buchung.py           # Pure business logic (Buchung, BuchungManager)
+├── konten_loader.py     # Account data loading from JSON
+├── library_check.py     # Dependency verification
+├── report.py            # Report generation
+└── steuerberater.py     # Tax advisor export
+data/
+├── konten.json          # Account data (was konten.py)
+└── buchungen.json       # Booking data
+```
+
+#### Key Improvements
+
+**1. Separation of Concerns**
+- `ui.py`: All Tkinter widgets, event handlers, UI logic
+- `buchung.py`: Data models (Buchung class) and business logic (BuchungManager)
+- `konten_loader.py`: Clean API for accessing account data
+
+**2. Data Migration**
+- Converted `data/konten.py` (Python module with 103 accounts) to `data/konten.json`
+- Preserved all account data: number, name, group
+- Preserved all 18 color-coded groups with exact Tkinter color names
+- Verified: All 103 accounts successfully migrated
+
+**3. konten_loader.py API**
+```python
+load_konten()                    # Load JSON data
+get_all_accounts()               # Get flat list of all accounts
+get_accounts_by_group(name)      # Get accounts for specific group
+get_group_color(name)            # Get color for group
+get_all_groups()                 # Get list of all group names
+```
+
+**4. Buchung Module**
+```python
+class Buchung:
+    # Data model for a single booking
+    # Attributes: datum, gegenkonto, beschreibung, konto, soll, haben, etc.
+
+class BuchungManager:
+    load_buchungen()             # Load from JSON
+    save_buchungen()             # Save to JSON
+    get_current_buchung()        # Get current booking
+    save_current_buchung(data)   # Save/update booking
+    navigate_previous()          # Navigate backward
+    navigate_next()              # Navigate forward
+    get_buchungen_by_month()     # Filter by month
+    get_buchungen_by_year()      # Filter by year
+```
+
+**5. Main Entry Point**
+- `src/main.py`: Checks dependencies via library_check, then launches UI
+- Clean separation between initialization and UI display
+
+#### Preserved Features
+✅ Single booking window (Tkinter)
+✅ All input fields (date, counter account, description, etc.)
+✅ Counter account dropdown (1000 - Kasse / 1200 - SPK)
+✅ VAT selector (00, 30, 80, 90)
+✅ Color-coded account selection popup with scrolling
+✅ Debit/Credit side by side
+✅ Navigation (previous/next booking)
+✅ All 18 account groups with correct colors:
+  - Anlagen (lightblue), Finanzen (lightgreen), Privat (lightyellow)
+  - Erträge (lightcyan), Material (lightpink), Löhne (orange)
+  - Miete (violet), Steuern (violet), Versicherung (lightgray)
+  - Fahrzeug (lightgray), Werbung (lightgray), Reisen (lightgray)
+  - Allgemein (wheat), Fortbildung (wheat), Beratung (wheat)
+  - Betrieb (wheat), Serviceleistungen (red), Verkäufe (gold)
+
+#### Testing Results
+✅ konten_loader: Loads all 103 accounts correctly
+✅ BuchungManager: Loads existing bookings (3 found)
+✅ Navigation: Previous/Next functionality works
+✅ Buchung class: Converts dictionary to object with type-safe attributes
+✅ Color mapping: All groups have correct colors
+✅ Imports: report.py and steuerberater.py compatible
+
+### Running the Application
+
+**Start the application:**
+```bash
+python src/main.py
+```
+
+The application will:
+1. Check for required libraries (pandas, openpyxl, reportlab, tkinter)
+2. Display instructions if any are missing
+3. Launch the booking UI if all dependencies are met
+
+## Implementation Status: ✅ REFACTORED & COMPLETE
 
 ### Core Features Implemented
 
