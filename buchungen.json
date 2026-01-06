@@ -1,0 +1,41 @@
+[
+    {
+        "buchungsdatum": "25.11.14",
+        "beschreibung": "Gemeinde Kirchlengern",
+        "kundennr": "1202",
+        "rechnungsnr": "1459",
+        "rechnungsdatum": "17.11.14",
+        "gegenkonto": "1200 Bank",
+        "mwst": "30",
+        "konto": "8405 Klaviermiete Veranstaltung",
+        "soll": "400",
+        "haben": "00",
+        "laufende_nr": "1"
+    },
+    {
+        "datum": "2025-10-24",
+        "gegenkonto": "1200 - SPK",
+        "beschreibung": "",
+        "kundennummer": "",
+        "rechnungsnummer": "",
+        "rechnungsdatum": "",
+        "mwst": "",
+        "konto": "420 - Büroeinrichtung",
+        "soll": "",
+        "haben": "",
+        "lfd_nr": 2
+    },
+    {
+        "datum": "2025-10-24",
+        "gegenkonto": "1200 - SPK",
+        "beschreibung": "tresd",
+        "kundennummer": "54646",
+        "rechnungsnummer": "456456",
+        "rechnungsdatum": "4564",
+        "mwst": "30",
+        "konto": "420 - Büroeinrichtung",
+        "soll": "0",
+        "haben": "345",
+        "lfd_nr": 3
+    }
+]
