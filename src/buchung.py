@@ -22,8 +22,15 @@ class Buchung:
         self.beschreibung = beschreibung
         self.konto = konto
         self.gegenkonto = gegenkonto
-        self.soll = float(soll) if soll else 0.0
-        self.haben = float(haben) if haben else 0.0
+        # Safely convert soll and haben to float, handling invalid values
+        try:
+            self.soll = float(soll) if soll else 0.0
+        except (ValueError, TypeError):
+            self.soll = 0.0
+        try:
+            self.haben = float(haben) if haben else 0.0
+        except (ValueError, TypeError):
+            self.haben = 0.0
         self.kundennummer = kundennummer
         self.rechnungsnummer = rechnungsnummer
         self.rechnungsdatum = rechnungsdatum

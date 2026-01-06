@@ -20,6 +20,8 @@ from buchung import BuchfuehrungApp
 
 def main():
     """Main entry point."""
+    # BuchfuehrungApp.__init__ calls self.root.mainloop() internally,
+    # so the app will start and run until the window is closed
     app = BuchfuehrungApp()
 
 if __name__ == "__main__":
