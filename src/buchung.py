@@ -1,30 +1,273 @@
 # Buchung.py
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog, simpledialog
 from datetime import datetime
 import json
+import os
+import sys
+
+# Add data directory to path for konten import
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'data'))
 import konten  # Import der Kontenliste
 
-BUCHUNGEN_FILE = "buchungen.json"
+BUCHUNGEN_FILE = os.path.join(os.path.dirname(__file__), '..', 'data', 'buchungen.json')
+
 
 class Buchung:
-    def __init__(self):
-        # Lade Buchungen oder starte leer
+    """Data class for a single booking entry."""
+    
+    def __init__(self, datum, beschreibung, konto, gegenkonto, soll, haben, 
+                 kundennummer="", rechnungsnummer="", rechnungsdatum="", mwst="", lfd_nr=0):
+        self.datum = datum
+        self.beschreibung = beschreibung
+        self.konto = konto
+        self.gegenkonto = gegenkonto
+        self.soll = float(soll) if soll else 0.0
+        self.haben = float(haben) if haben else 0.0
+        self.kundennummer = kundennummer
+        self.rechnungsnummer = rechnungsnummer
+        self.rechnungsdatum = rechnungsdatum
+        self.mwst = mwst
+        self.lfd_nr = lfd_nr
+    
+    def to_dict(self):
+        """Convert booking to dictionary."""
+        return {
+            "datum": self.datum,
+            "beschreibung": self.beschreibung,
+            "konto": self.konto,
+            "gegenkonto": self.gegenkonto,
+            "soll": str(self.soll),
+            "haben": str(self.haben),
+            "kundennummer": self.kundennummer,
+            "rechnungsnummer": self.rechnungsnummer,
+            "rechnungsdatum": self.rechnungsdatum,
+            "mwst": self.mwst,
+            "lfd_nr": self.lfd_nr
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        """Create booking from dictionary."""
+        return cls(
+            datum=data.get("datum", ""),
+            beschreibung=data.get("beschreibung", ""),
+            konto=data.get("konto", ""),
+            gegenkonto=data.get("gegenkonto", ""),
+            soll=data.get("soll", 0),
+            haben=data.get("haben", 0),
+            kundennummer=data.get("kundennummer", ""),
+            rechnungsnummer=data.get("rechnungsnummer", ""),
+            rechnungsdatum=data.get("rechnungsdatum", ""),
+            mwst=data.get("mwst", ""),
+            lfd_nr=data.get("lfd_nr", 0)
+        )
+
+
+class BuchungManager:
+    """Manages bookings and provides data access methods."""
+    
+    def __init__(self, buchungen_file=BUCHUNGEN_FILE):
+        self.buchungen_file = buchungen_file
+        self.buchungen = []
+        self.load_buchungen()
+    
+    def load_buchungen(self):
+        """Load bookings from JSON file."""
         try:
-            with open(BUCHUNGEN_FILE, "r", encoding="utf-8") as f:
-                self.buchungen = json.load(f)
+            with open(self.buchungen_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                self.buchungen = [Buchung.from_dict(b) for b in data]
         except FileNotFoundError:
             self.buchungen = []
-        self.index = len(self.buchungen) - 1
+    
+    def save_buchungen(self):
+        """Save bookings to JSON file."""
+        with open(self.buchungen_file, "w", encoding="utf-8") as f:
+            data = [b.to_dict() for b in self.buchungen]
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    
+    def add_buchung(self, buchung):
+        """Add a new booking."""
+        self.buchungen.append(buchung)
+        self.save_buchungen()
+    
+    def update_buchung(self, index, buchung):
+        """Update an existing booking."""
+        if 0 <= index < len(self.buchungen):
+            self.buchungen[index] = buchung
+            self.save_buchungen()
+    
+    def get_buchungen_by_month(self, year, month):
+        """Get all bookings for a specific month."""
+        result = []
+        for b in self.buchungen:
+            if b.datum:
+                try:
+                    # Try different date formats
+                    date_obj = None
+                    for fmt in ["%Y-%m-%d", "%d.%m.%y", "%d.%m.%Y"]:
+                        try:
+                            date_obj = datetime.strptime(b.datum, fmt)
+                            break
+                        except ValueError:
+                            continue
+                    
+                    if date_obj and date_obj.year == year and date_obj.month == month:
+                        result.append(b)
+                except Exception:
+                    continue
+        return result
+    
+    def get_buchungen_by_year(self, year):
+        """Get all bookings for a specific year."""
+        result = []
+        for b in self.buchungen:
+            if b.datum:
+                try:
+                    date_obj = None
+                    for fmt in ["%Y-%m-%d", "%d.%m.%y", "%d.%m.%Y"]:
+                        try:
+                            date_obj = datetime.strptime(b.datum, fmt)
+                            break
+                        except ValueError:
+                            continue
+                    
+                    if date_obj and date_obj.year == year:
+                        result.append(b)
+                except Exception:
+                    continue
+        return result
+
+
+class BuchfuehrungApp:
+    """Main application UI for managing bookings."""
+    
+    def __init__(self):
+        self.manager = BuchungManager()
+        self.index = len(self.manager.buchungen) - 1
+        self.current_counter_account = "1200 - SPK"  # Default counter account
 
         # Tkinter Fenster
         self.root = tk.Tk()
-        self.root.title("Buchung")
+        self.root.title("Buchführung")
 
+        self.create_menu_bar()
         self.create_widgets()
-        if self.buchungen:
+        if self.manager.buchungen:
             self.show_buchung(self.index)
         self.root.mainloop()
+
+    def create_menu_bar(self):
+        """Create menu bar with Buchen and Berichte menus."""
+        menubar = tk.Menu(self.root)
+
+        # Buchen Menu
+        buchen_menu = tk.Menu(menubar, tearoff=0)
+        buchen_menu.add_command(label="Buchen Bank", command=self.buchen_bank)
+        buchen_menu.add_command(label="Buchen Kasse", command=self.buchen_kasse)
+        menubar.add_cascade(label="Buchen", menu=buchen_menu)
+
+        # Reports Menu
+        reports_menu = tk.Menu(menubar, tearoff=0)
+        reports_menu.add_command(label="Bericht Gegenkonto", command=self.generate_report_gegenkonto)
+        reports_menu.add_command(label="Bericht Zusammenfassung", command=self.generate_report_zusammenfassung)
+        reports_menu.add_command(label="Bericht Sparkasse", command=self.generate_report_sparkasse)
+        reports_menu.add_command(label="Bericht Kasse", command=self.generate_report_kasse)
+        menubar.add_cascade(label="Berichte", menu=reports_menu)
+
+        self.root.config(menu=menubar)
+
+    def buchen_bank(self):
+        """Set counter account to Bank (1200)."""
+        self.set_counter_account("Bank")
+        messagebox.showinfo("Info", "Gegenkonto auf Bank (1200 - SPK) gesetzt")
+
+    def buchen_kasse(self):
+        """Set counter account to Kasse (1000)."""
+        self.set_counter_account("Kasse")
+        messagebox.showinfo("Info", "Gegenkonto auf Kasse (1000 - Kasse) gesetzt")
+
+    def set_counter_account(self, account_type):
+        """Set the default counter account based on selection."""
+        if account_type == "Bank":
+            self.current_counter_account = "1200 - SPK"
+        elif account_type == "Kasse":
+            self.current_counter_account = "1000 - Kasse"
+        
+        # Update the dropdown selection
+        self.gegenkonto_var.set(self.current_counter_account)
+
+    def generate_report_gegenkonto(self):
+        """Generate counter account report."""
+        self._generate_report("Gegenkonto")
+
+    def generate_report_zusammenfassung(self):
+        """Generate summary report."""
+        self._generate_report("Zusammenfassung")
+
+    def generate_report_sparkasse(self):
+        """Generate Sparkasse report."""
+        self._generate_report("Sparkasse")
+
+    def generate_report_kasse(self):
+        """Generate Kasse report."""
+        self._generate_report("Kasse")
+
+    def _generate_report(self, report_type):
+        """Generate a report with year/month dialog."""
+        # Import here to avoid circular imports
+        try:
+            from steuerberater import SteuerberaterExport
+            from report import ReportGenerator
+        except ImportError as e:
+            messagebox.showerror("Fehler", f"Kann Report-Module nicht laden: {e}")
+            return
+        
+        # Ask for year and month
+        year_str = simpledialog.askstring("Jahr eingeben", "Bitte Jahr eingeben (z.B. 2025):", 
+                                          initialvalue=str(datetime.now().year))
+        if not year_str:
+            return
+        
+        month_str = simpledialog.askstring("Monat eingeben", "Bitte Monat eingeben (1-12):", 
+                                           initialvalue=str(datetime.now().month))
+        if not month_str:
+            return
+        
+        try:
+            year = int(year_str)
+            month = int(month_str)
+            if month < 1 or month > 12:
+                raise ValueError("Monat muss zwischen 1 und 12 liegen")
+        except ValueError as e:
+            messagebox.showerror("Fehler", f"Ungültige Eingabe: {e}")
+            return
+        
+        # Ask for save location
+        default_filename = f"{report_type}_Report_{year}_{month:02d}.pdf"
+        filename = filedialog.asksaveasfilename(
+            defaultextension=".pdf",
+            filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")],
+            initialfile=default_filename
+        )
+        
+        if not filename:
+            return
+        
+        try:
+            if report_type in ["Gegenkonto", "Sparkasse", "Kasse"]:
+                # Use Steuerberater export
+                steuerberater = SteuerberaterExport(self.manager)
+                steuerberater.export_steuerberater_pdf(year, month, filename)
+            else:
+                # Use regular report generator
+                report_gen = ReportGenerator(self.manager)
+                report_gen.export_monthly_report_pdf(year, month, filename)
+            
+            messagebox.showinfo("Erfolg", f"Report erfolgreich erstellt: {filename}")
+        except Exception as e:
+            messagebox.showerror("Fehler", f"Fehler beim Erstellen des Reports: {e}")
 
     def create_widgets(self):
         # Buchungsdatum
@@ -34,7 +277,7 @@ class Buchung:
 
         # Gegenkonto Dropdown
         tk.Label(self.root, text="Gegenkonto:").grid(row=0, column=3, sticky="w")
-        self.gegenkonto_var = tk.StringVar()
+        self.gegenkonto_var = tk.StringVar(value=self.current_counter_account)
         self.gegenkonto_combo = ttk.Combobox(self.root, textvariable=self.gegenkonto_var, values=[
             "1000 - Kasse",
             "1200 - SPK"
@@ -144,52 +387,51 @@ class Buchung:
         tk.Button(selector, text="OK", command=confirm_selection).pack()
 
     def show_buchung(self, index):
-        if index < 0 or index >= len(self.buchungen):
+        if index < 0 or index >= len(self.manager.buchungen):
             return
-        b = self.buchungen[index]
+        b = self.manager.buchungen[index]
         self.datum_entry.delete(0, tk.END)
-        self.datum_entry.insert(0, b["datum"])
-        self.gegenkonto_var.set(b.get("gegenkonto", ""))
+        self.datum_entry.insert(0, b.datum)
+        self.gegenkonto_var.set(b.gegenkonto)
         self.beschreibung_entry.delete(0, tk.END)
-        self.beschreibung_entry.insert(0, b["beschreibung"])
+        self.beschreibung_entry.insert(0, b.beschreibung)
         self.kundennummer_entry.delete(0, tk.END)
-        self.kundennummer_entry.insert(0, b["kundennummer"])
+        self.kundennummer_entry.insert(0, b.kundennummer)
         self.rechnungsnummer_entry.delete(0, tk.END)
-        self.rechnungsnummer_entry.insert(0, b["rechnungsnummer"])
+        self.rechnungsnummer_entry.insert(0, b.rechnungsnummer)
         self.rechnungsdatum_entry.delete(0, tk.END)
-        self.rechnungsdatum_entry.insert(0, b["rechnungsdatum"])
-        self.mwst_var.set(b["mwst"])
-        self.konto_var.set(b["konto"])
-        self.konto_display.config(text=b["konto"])
+        self.rechnungsdatum_entry.insert(0, b.rechnungsdatum)
+        self.mwst_var.set(b.mwst)
+        self.konto_var.set(b.konto)
+        self.konto_display.config(text=b.konto)
         self.soll_entry.delete(0, tk.END)
-        self.soll_entry.insert(0, b["soll"])
+        self.soll_entry.insert(0, str(b.soll) if b.soll else "")
         self.haben_entry.delete(0, tk.END)
-        self.haben_entry.insert(0, b["haben"])
-        self.lfd_nr_label.config(text=str(b["lfd_nr"]))
+        self.haben_entry.insert(0, str(b.haben) if b.haben else "")
+        self.lfd_nr_label.config(text=str(b.lfd_nr))
 
     def save_buchung(self):
         datum = self.datum_entry.get() or datetime.now().strftime("%Y-%m-%d")
-        buchung = {
-            "datum": datum,
-            "gegenkonto": self.gegenkonto_var.get(),
-            "beschreibung": self.beschreibung_entry.get(),
-            "kundennummer": self.kundennummer_entry.get(),
-            "rechnungsnummer": self.rechnungsnummer_entry.get(),
-            "rechnungsdatum": self.rechnungsdatum_entry.get(),
-            "mwst": self.mwst_var.get(),
-            "konto": self.konto_var.get(),
-            "soll": self.soll_entry.get(),
-            "haben": self.haben_entry.get(),
-            "lfd_nr": self.index+2
-        }
-        if self.index+1 < len(self.buchungen):
-            self.buchungen[self.index] = buchung
+        buchung = Buchung(
+            datum=datum,
+            gegenkonto=self.gegenkonto_var.get(),
+            beschreibung=self.beschreibung_entry.get(),
+            kundennummer=self.kundennummer_entry.get(),
+            rechnungsnummer=self.rechnungsnummer_entry.get(),
+            rechnungsdatum=self.rechnungsdatum_entry.get(),
+            mwst=self.mwst_var.get(),
+            konto=self.konto_var.get(),
+            soll=self.soll_entry.get() or 0,
+            haben=self.haben_entry.get() or 0,
+            lfd_nr=self.index + 2
+        )
+        
+        if self.index + 1 < len(self.manager.buchungen):
+            self.manager.update_buchung(self.index, buchung)
         else:
-            self.buchungen.append(buchung)
-            self.index = len(self.buchungen) - 1
+            self.manager.add_buchung(buchung)
+            self.index = len(self.manager.buchungen) - 1
 
-        with open(BUCHUNGEN_FILE, "w", encoding="utf-8") as f:
-            json.dump(self.buchungen, f, ensure_ascii=False, indent=4)
         self.show_buchung(self.index)
         messagebox.showinfo("Info", "Buchung gespeichert.")
 
@@ -199,9 +441,9 @@ class Buchung:
             self.show_buchung(self.index)
 
     def next_buchung(self):
-        if self.index < len(self.buchungen)-1:
+        if self.index < len(self.manager.buchungen) - 1:
             self.index += 1
             self.show_buchung(self.index)
 
 if __name__ == "__main__":
-    Buchung()
+    BuchfuehrungApp()
