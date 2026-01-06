@@ -419,6 +419,9 @@ class BuchfuehrungApp:
 
     def save_buchung(self):
         datum = self.datum_entry.get() or datetime.now().strftime("%Y-%m-%d")
+        soll_value = self.soll_entry.get() or "0"
+        haben_value = self.haben_entry.get() or "0"
+        
         buchung = Buchung(
             datum=datum,
             gegenkonto=self.gegenkonto_var.get(),
@@ -428,8 +431,8 @@ class BuchfuehrungApp:
             rechnungsdatum=self.rechnungsdatum_entry.get(),
             mwst=self.mwst_var.get(),
             konto=self.konto_var.get(),
-            soll=self.soll_entry.get() or 0,
-            haben=self.haben_entry.get() or 0,
+            soll=soll_value,
+            haben=haben_value,
             lfd_nr=self.index + 2
         )
         
