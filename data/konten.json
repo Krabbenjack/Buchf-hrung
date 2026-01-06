@@ -1,0 +1,195 @@
+{
+  "Anlagen": {
+    "color": "#A7C7E7",
+    "accounts": [
+      { "nummer": 27, "bezeichnung": "EDV - Software" },
+      { "nummer": 165, "bezeichnung": "Umbau gemieter Räume" },
+      { "nummer": 210, "bezeichnung": "Maschinen" },
+      { "nummer": 320, "bezeichnung": "PKW" },
+      { "nummer": 410, "bezeichnung": "Werkstatteinrichtung" },
+      { "nummer": 420, "bezeichnung": "Büroeinrichtung" },
+      { "nummer": 430, "bezeichnung": "Ladeneinrichtung" },
+      { "nummer": 480, "bezeichnung": "Sammelposten bis 410,-- €" },
+      { "nummer": 490, "bezeichnung": "Mietklaviere - Bestand" }
+    ]
+  },
+  "Finanzen": {
+    "color": "#90EE90",
+    "accounts": [
+      { "nummer": 711, "bezeichnung": "Darlehn J.W." },
+      { "nummer": 1000, "bezeichnung": "Kasse (nur Gegenkonto)" },
+      { "nummer": 1200, "bezeichnung": "SPK  (nur Gegenkonto)" },
+      { "nummer": 1220, "bezeichnung": "Santander Tagegeld" },
+      { "nummer": 1360, "bezeichnung": "Geldtransit" },
+      { "nummer": 1410, "bezeichnung": "Forderungen aus L.u.L." },
+      { "nummer": 1502, "bezeichnung": "Darlehn G.Werner" },
+      { "nummer": 1510, "bezeichnung": "Ford. Auf Anzahlungen" },
+      { "nummer": 1540, "bezeichnung": "überzahlte Steuern" },
+      { "nummer": 1570, "bezeichnung": "Vorsteuer" },
+      { "nummer": 1575, "bezeichnung": "Vorsteuer aus Vers.-Schadenerst." },
+      { "nummer": 1590, "bezeichnung": "Durchlaufende Posten" },
+      { "nummer": 1610, "bezeichnung": "Verbindlichkeiten aus L.u.L." },
+      { "nummer": 1700, "bezeichnung": "sonst. Verbindlichkeiten" },
+      { "nummer": 1706, "bezeichnung": "Verbindl. Darlehn Ehefrau" },
+      { "nummer": 1732, "bezeichnung": "Kaution" },
+      { "nummer": 1740, "bezeichnung": "Verbindl.  Lohn u. Gehalt" },
+      { "nummer": 1741, "bezeichnung": "Verbindl. Lohnsteuer" },
+      { "nummer": 1742, "bezeichnung": "Verbindl. Soz. Aufwendungen" },
+      { "nummer": 1780, "bezeichnung": "Umsatzsteuer" },
+      { "nummer": 1781, "bezeichnung": "UST - Sonderzahlung 1/11" },
+      { "nummer": 1789, "bezeichnung": "Verbindl. U.steuer" }
+    ]
+  },
+  "Privat": {
+    "color": "#FFFFE0",
+    "accounts": [
+      { "nummer": 1790, "bezeichnung": "Ust Vorjahr" },
+      { "nummer": 1800, "bezeichnung": "Privat" },
+      { "nummer": 1810, "bezeichnung": "Einkommensteuer" },
+      { "nummer": 1820, "bezeichnung": "Krankenvers. C.W." },
+      { "nummer": 1821, "bezeichnung": "Rente C.W" },
+      { "nummer": 1822, "bezeichnung": "Unfallversicherungen" },
+      { "nummer": 1840, "bezeichnung": "Spende  privat" }
+    ]
+  },
+  "Erträge": {
+    "color": "#E0FFFF",
+    "accounts": [
+      { "nummer": 1890, "bezeichnung": "Privat-Einlagen" },
+      { "nummer": 2100, "bezeichnung": "Zins-Aufwendungen" },
+      { "nummer": 2380, "bezeichnung": "Spenden" },
+      { "nummer": 2384, "bezeichnung": "Beiträge an Partei" },
+      { "nummer": 2650, "bezeichnung": "Zins-Erträge" },
+      { "nummer": 2700, "bezeichnung": "sonst. Erlöse" },
+      { "nummer": 2742, "bezeichnung": "Versicherungs-Entschädigung" }
+    ]
+  },
+  "Material": {
+    "color": "#FFB6C1",
+    "accounts": [
+      { "nummer": 3000, "bezeichnung": "Roh-Hilfs-Betriebsstoffe" },
+      { "nummer": 3001, "bezeichnung": "Kleinmaterial" },
+      { "nummer": 3100, "bezeichnung": "Fremdleistungen" },
+      { "nummer": 3123, "bezeichnung": "Fremdleistung nach § 13b /Polen" },
+      { "nummer": 3200, "bezeichnung": "Wareneingang o.Mwst" },
+      { "nummer": 3400, "bezeichnung": "Wareneingang m. Mwst." },
+      { "nummer": 3740, "bezeichnung": "Bonus" }
+    ]
+  },
+  "Löhne": {
+    "color": "#FFA500",
+    "accounts": [
+      { "nummer": 4100, "bezeichnung": "Löhne u. Gehälter" },
+      { "nummer": 4101, "bezeichnung": "Lohnsteuer" },
+      { "nummer": 4102, "bezeichnung": "Zeitarbeiter" },
+      { "nummer": 4130, "bezeichnung": "soz. Aufwendungen" },
+      { "nummer": 4138, "bezeichnung": "Beiträge Berufsgen." },
+      { "nummer": 4165, "bezeichnung": "Altersversorgung" }
+    ]
+  },
+  "Miete": {
+    "color": "#EE82EE",
+    "accounts": [
+      { "nummer": 4190, "bezeichnung": "Aushilfslöhne" },
+      { "nummer": 4210, "bezeichnung": "Miete Geschäftsräume" },
+      { "nummer": 4240, "bezeichnung": "Gas, Strom. Wasser" },
+      { "nummer": 4260, "bezeichnung": "Instandhaltung" }
+    ]
+  },
+  "Steuern": {
+    "color": "#EE82EE",
+    "accounts": [
+      { "nummer": 4320, "bezeichnung": "Gewerbesteuer" }
+    ]
+  },
+  "Versicherung": {
+    "color": "#D3D3D3",
+    "accounts": [
+      { "nummer": 4360, "bezeichnung": "Versicherungen" },
+      { "nummer": 4380, "bezeichnung": "Beiträge zu Verbänden usw." }
+    ]
+  },
+  "Fahrzeug": {
+    "color": "#D3D3D3",
+    "accounts": [
+      { "nummer": 4500, "bezeichnung": "Fahrzeugkosten" },
+      { "nummer": 4510, "bezeichnung": "Kfz.-Steuer" },
+      { "nummer": 4520, "bezeichnung": "Kfz.-Versicherungen" },
+      { "nummer": 4530, "bezeichnung": "Benzin" },
+      { "nummer": 4540, "bezeichnung": "Kfz.-Reparaturen" },
+      { "nummer": 4541, "bezeichnung": "Kfz-Schadensbeteiligung" }
+    ]
+  },
+  "Werbung": {
+    "color": "#D3D3D3",
+    "accounts": [
+      { "nummer": 4610, "bezeichnung": "Werbekosten" },
+      { "nummer": 4611, "bezeichnung": "Anzeigenwerbung" },
+      { "nummer": 4612, "bezeichnung": "Werbekosten o.Mwst." },
+      { "nummer": 4630, "bezeichnung": "Geschenke unter 38,30 €" },
+      { "nummer": 4640, "bezeichnung": "Repräsentationskosten" },
+      { "nummer": 4650, "bezeichnung": "Bewirtung 70 %" },
+      { "nummer": 4651, "bezeichnung": "Bewirtung 30 % privat" }
+    ]
+  },
+  "Reisen": {
+    "color": "#D3D3D3",
+    "accounts": [
+      { "nummer": 4660, "bezeichnung": "Reisekosten - Arbeitnehmer" },
+      { "nummer": 4670, "bezeichnung": "Reisekosten - Unternehmer" }
+    ]
+  },
+  "Allgemein": {
+    "color": "#F5DEB3",
+    "accounts": [
+      { "nummer": 4730, "bezeichnung": "Ausgangsfrachten" },
+      { "nummer": 4760, "bezeichnung": "Verkaufsprovisionen" },
+      { "nummer": 4900, "bezeichnung": "sonstige Kosten" },
+      { "nummer": 4910, "bezeichnung": "Porto" },
+      { "nummer": 4920, "bezeichnung": "Telefon" },
+      { "nummer": 4930, "bezeichnung": "Bürobedarf" }
+    ]
+  },
+  "Fortbildung": {
+    "color": "#F5DEB3",
+    "accounts": [
+      { "nummer": 4940, "bezeichnung": "Zeitschriften (80)" },
+      { "nummer": 4945, "bezeichnung": "Fortbildung (90)" }
+    ]
+  },
+  "Beratung": {
+    "color": "#F5DEB3",
+    "accounts": [
+      { "nummer": 4950, "bezeichnung": "Rechts- und Beratungskosten" },
+      { "nummer": 4955, "bezeichnung": "Buchführungskosten" },
+      { "nummer": 4970, "bezeichnung": "Nebenkosten des Geldverkehrs" }
+    ]
+  },
+  "Betrieb": {
+    "color": "#F5DEB3",
+    "accounts": [
+      { "nummer": 4980, "bezeichnung": "Betriebsbedarf" },
+      { "nummer": 4985, "bezeichnung": "Werkzeuge und Kleingeräte" }
+    ]
+  },
+  "Serviceleistungen": {
+    "color": "#FF0000",
+    "accounts": [
+      { "nummer": 8100, "bezeichnung": "Mwst-freie Umsätze" },
+      { "nummer": 8200, "bezeichnung": "Klav.Stmg. Ohne Mwst." },
+      { "nummer": 8400, "bezeichnung": "Warenausgang" },
+      { "nummer": 8401, "bezeichnung": "Klaviermieten, monatl." },
+      { "nummer": 8402, "bezeichnung": "Klavierstimmungen" },
+      { "nummer": 8403, "bezeichnung": "Reparaturen" },
+      { "nummer": 8404, "bezeichnung": "Transporte / Sonstiges" },
+      { "nummer": 8405, "bezeichnung": "Klaviermiete Veranstaltung" }
+    ]
+  },
+  "Verkäufe": {
+    "color": "#FFD700",
+    "accounts": [
+      { "nummer": 8800, "bezeichnung": "Kfz.Verkäufe" },
+      { "nummer": 8820, "bezeichnung": "Anlagen - Verkäufe" }
+    ]
+  }
+}

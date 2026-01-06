@@ -1,207 +1,220 @@
-# Buchung.py
-import tkinter as tk
-from tkinter import ttk, messagebox
-from datetime import datetime
-import json
-import konten  # Import der Kontenliste
+"""
+buchung.py
+Booking logic and data persistence - no UI code.
+"""
 
-BUCHUNGEN_FILE = "buchungen.json"
+import json
+import os
+from datetime import datetime
+
+# Path to buchungen.json
+BUCHUNGEN_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "buchungen.json")
+
 
 class Buchung:
+    """Represents a single booking entry."""
+    
+    def __init__(self, data):
+        """
+        Initialize a Buchung from a dictionary.
+        
+        Args:
+            data: Dictionary with booking data
+        """
+        self.datum = data.get("datum", "")
+        self.gegenkonto = data.get("gegenkonto", "")
+        self.beschreibung = data.get("beschreibung", "")
+        self.kundennummer = data.get("kundennummer", "")
+        self.rechnungsnummer = data.get("rechnungsnummer", "")
+        self.rechnungsdatum = data.get("rechnungsdatum", "")
+        self.mwst = data.get("mwst", "")
+        self.konto = data.get("konto", "")
+        
+        # Convert soll/haben to float, defaulting to 0.0
+        try:
+            self.soll = float(data.get("soll", 0) or 0)
+        except (ValueError, TypeError):
+            self.soll = 0.0
+        
+        try:
+            self.haben = float(data.get("haben", 0) or 0)
+        except (ValueError, TypeError):
+            self.haben = 0.0
+        
+        self.lfd_nr = data.get("lfd_nr", 0)
+
+
+class BuchungManager:
+    """Manages booking data - loading, saving, and navigation."""
+    
     def __init__(self):
-        # Lade Buchungen oder starte leer
+        """Initialize the booking manager."""
+        self.buchungen = []
+        self.index = 0
+        self.load_buchungen()
+    
+    def load_buchungen(self):
+        """Load bookings from JSON file."""
         try:
             with open(BUCHUNGEN_FILE, "r", encoding="utf-8") as f:
                 self.buchungen = json.load(f)
+            if self.buchungen:
+                self.index = len(self.buchungen) - 1
         except FileNotFoundError:
             self.buchungen = []
-        self.index = len(self.buchungen) - 1
-
-        # Tkinter Fenster
-        self.root = tk.Tk()
-        self.root.title("Buchung")
-
-        self.create_widgets()
-        if self.buchungen:
-            self.show_buchung(self.index)
-        self.root.mainloop()
-
-    def create_widgets(self):
-        # Buchungsdatum
-        tk.Label(self.root, text="Buchungsdatum:").grid(row=0, column=0, sticky="w")
-        self.datum_entry = tk.Entry(self.root)
-        self.datum_entry.grid(row=0, column=1)
-
-        # Gegenkonto Dropdown
-        tk.Label(self.root, text="Gegenkonto:").grid(row=0, column=3, sticky="w")
-        self.gegenkonto_var = tk.StringVar()
-        self.gegenkonto_combo = ttk.Combobox(self.root, textvariable=self.gegenkonto_var, values=[
-            "1000 - Kasse",
-            "1200 - SPK"
-        ])
-        self.gegenkonto_combo.grid(row=0, column=4)
-
-        # Beschreibung
-        tk.Label(self.root, text="Beschreibung:").grid(row=1, column=0, sticky="w")
-        self.beschreibung_entry = tk.Entry(self.root, width=50)
-        self.beschreibung_entry.grid(row=1, column=1, columnspan=3, sticky="w")
-
-        # Kundennummer
-        tk.Label(self.root, text="Kundennummer:").grid(row=2, column=0, sticky="w")
-        self.kundennummer_entry = tk.Entry(self.root)
-        self.kundennummer_entry.grid(row=2, column=1, sticky="w")
-
-        # Rechnungsnummer
-        tk.Label(self.root, text="Rechnungsnummer:").grid(row=2, column=2, sticky="w")
-        self.rechnungsnummer_entry = tk.Entry(self.root)
-        self.rechnungsnummer_entry.grid(row=2, column=3, sticky="w")
-
-        # Rechnungsdatum
-        tk.Label(self.root, text="Rechnungsdatum:").grid(row=3, column=0, sticky="w")
-        self.rechnungsdatum_entry = tk.Entry(self.root)
-        self.rechnungsdatum_entry.grid(row=3, column=1, sticky="w")
-
-        # MwSt
-        tk.Label(self.root, text="MwSt:").grid(row=4, column=0, sticky="w")
-        self.mwst_var = tk.StringVar()
-        self.mwst_combo = ttk.Combobox(self.root, textvariable=self.mwst_var, values=["00","30","80","90"])
-        self.mwst_combo.grid(row=4, column=1, sticky="w")
-
-        # Konto Auswahl
-        tk.Label(self.root, text="Konto:").grid(row=5, column=0, sticky="w")
-        self.konto_var = tk.StringVar()
-        self.konto_display = tk.Label(self.root, text="", width=50, anchor="w", relief="sunken")
-        self.konto_display.grid(row=5, column=1, columnspan=3, sticky="w")
-        tk.Button(self.root, text="Konto auswählen", command=self.open_konto_selector).grid(row=5, column=4)
-
-        # Soll/Haben nebeneinander
-        tk.Label(self.root, text="Soll:").grid(row=6, column=0, sticky="w")
-        self.soll_entry = tk.Entry(self.root)
-        self.soll_entry.grid(row=6, column=1, sticky="w")
-        tk.Label(self.root, text="Haben:").grid(row=6, column=2, sticky="w")
-        self.haben_entry = tk.Entry(self.root)
-        self.haben_entry.grid(row=6, column=3, sticky="w")
-
-        # Laufende Nummer
-        tk.Label(self.root, text="Lfd. Nr.:").grid(row=7, column=0, sticky="w")
-        self.lfd_nr_label = tk.Label(self.root, text="")
-        self.lfd_nr_label.grid(row=7, column=1, sticky="w")
-
-        # Buttons
-        tk.Button(self.root, text="Speichern", command=self.save_buchung).grid(row=8, column=0)
-        tk.Button(self.root, text="Vor", command=self.prev_buchung).grid(row=8, column=1)
-        tk.Button(self.root, text="Zurück", command=self.next_buchung).grid(row=8, column=2)
-
-    def open_konto_selector(self):
-        selector = tk.Toplevel(self.root)
-        selector.title("Konto auswählen")
-        canvas = tk.Canvas(selector)
-        frame = tk.Frame(canvas)
-        vsb = tk.Scrollbar(selector, orient="vertical", command=canvas.yview)
-        canvas.configure(yscrollcommand=vsb.set)
-        vsb.pack(side="right", fill="y")
-        canvas.pack(side="left", fill="both", expand=True)
-        canvas.create_window((0,0), window=frame, anchor="nw")
-        frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
-        farben = {
-            "Anlagen": "lightblue",
-            "Finanzen": "lightgreen",
-            "Privat": "lightyellow",
-            "Erträge": "lightcyan",
-            "Material": "lightpink",
-            "Löhne": "orange",
-            "Miete": "violet",
-            "Steuern": "violet",
-            "Versicherung": "lightgray",
-            "Fahrzeug": "lightgray",
-            "Werbung": "lightgray",
-            "Reisen": "lightgray",
-            "Allgemein": "wheat",
-            "Fortbildung": "wheat",
-            "Beratung": "wheat",
-            "Betrieb": "wheat",
-            "Serviceleistungen": "red",
-            "Verkäufe": "gold"
-        }
-
-        konten_vars = []
-        for konto in konten.konten_liste:
-            var_k = tk.IntVar()
-            cb = tk.Checkbutton(frame, text=f'{konto["nummer"]} - {konto["bezeichnung"]}', 
-                                variable=var_k, bg=farben.get(konto["gruppe"], "white"))
-            cb.pack(anchor="w")
-            konten_vars.append((konto, var_k))
-
-        def confirm_selection():
-            selected = [k for k,v in konten_vars if v.get()==1]
-            if selected:
-                konto_text = f'{selected[0]["nummer"]} - {selected[0]["bezeichnung"]}'
-                self.konto_var.set(konto_text)
-                self.konto_display.config(text=konto_text, bg=farben.get(selected[0]["gruppe"], "white"))
-            selector.destroy()
-
-        tk.Button(selector, text="OK", command=confirm_selection).pack()
-
-    def show_buchung(self, index):
-        if index < 0 or index >= len(self.buchungen):
-            return
-        b = self.buchungen[index]
-        self.datum_entry.delete(0, tk.END)
-        self.datum_entry.insert(0, b["datum"])
-        self.gegenkonto_var.set(b.get("gegenkonto", ""))
-        self.beschreibung_entry.delete(0, tk.END)
-        self.beschreibung_entry.insert(0, b["beschreibung"])
-        self.kundennummer_entry.delete(0, tk.END)
-        self.kundennummer_entry.insert(0, b["kundennummer"])
-        self.rechnungsnummer_entry.delete(0, tk.END)
-        self.rechnungsnummer_entry.insert(0, b["rechnungsnummer"])
-        self.rechnungsdatum_entry.delete(0, tk.END)
-        self.rechnungsdatum_entry.insert(0, b["rechnungsdatum"])
-        self.mwst_var.set(b["mwst"])
-        self.konto_var.set(b["konto"])
-        self.konto_display.config(text=b["konto"])
-        self.soll_entry.delete(0, tk.END)
-        self.soll_entry.insert(0, b["soll"])
-        self.haben_entry.delete(0, tk.END)
-        self.haben_entry.insert(0, b["haben"])
-        self.lfd_nr_label.config(text=str(b["lfd_nr"]))
-
-    def save_buchung(self):
-        datum = self.datum_entry.get() or datetime.now().strftime("%Y-%m-%d")
-        buchung = {
-            "datum": datum,
-            "gegenkonto": self.gegenkonto_var.get(),
-            "beschreibung": self.beschreibung_entry.get(),
-            "kundennummer": self.kundennummer_entry.get(),
-            "rechnungsnummer": self.rechnungsnummer_entry.get(),
-            "rechnungsdatum": self.rechnungsdatum_entry.get(),
-            "mwst": self.mwst_var.get(),
-            "konto": self.konto_var.get(),
-            "soll": self.soll_entry.get(),
-            "haben": self.haben_entry.get(),
-            "lfd_nr": self.index+2
-        }
-        if self.index+1 < len(self.buchungen):
-            self.buchungen[self.index] = buchung
-        else:
-            self.buchungen.append(buchung)
-            self.index = len(self.buchungen) - 1
-
+            self.index = 0
+    
+    def save_buchungen(self):
+        """Save all bookings to JSON file."""
         with open(BUCHUNGEN_FILE, "w", encoding="utf-8") as f:
             json.dump(self.buchungen, f, ensure_ascii=False, indent=4)
-        self.show_buchung(self.index)
-        messagebox.showinfo("Info", "Buchung gespeichert.")
-
-    def prev_buchung(self):
+    
+    def get_current_buchung(self):
+        """
+        Get the current booking.
+        
+        Returns:
+            dict: Current booking data or None if no bookings exist
+        """
+        if 0 <= self.index < len(self.buchungen):
+            return self.buchungen[self.index]
+        return None
+    
+    def save_current_buchung(self, buchung_data):
+        """
+        Save or update the current booking.
+        
+        Args:
+            buchung_data: Dictionary with booking data
+        """
+        # Add default date if not provided
+        if not buchung_data.get("datum"):
+            buchung_data["datum"] = datetime.now().strftime("%Y-%m-%d")
+        
+        # Set lfd_nr (sequential number)
+        buchung_data["lfd_nr"] = self.index + 2
+        
+        # Update existing or append new
+        if self.index < len(self.buchungen):
+            self.buchungen[self.index] = buchung_data
+        else:
+            self.buchungen.append(buchung_data)
+            self.index = len(self.buchungen) - 1
+        
+        self.save_buchungen()
+    
+    def navigate_previous(self):
+        """
+        Navigate to previous booking.
+        
+        Returns:
+            bool: True if navigation was successful, False otherwise
+        """
         if self.index > 0:
             self.index -= 1
-            self.show_buchung(self.index)
-
-    def next_buchung(self):
-        if self.index < len(self.buchungen)-1:
+            return True
+        return False
+    
+    def navigate_next(self):
+        """
+        Navigate to next booking.
+        
+        Returns:
+            bool: True if navigation was successful, False otherwise
+        """
+        if self.index < len(self.buchungen) - 1:
             self.index += 1
-            self.show_buchung(self.index)
-
-if __name__ == "__main__":
-    Buchung()
+            return True
+        return False
+    
+    def get_buchungen_count(self):
+        """
+        Get total number of bookings.
+        
+        Returns:
+            int: Number of bookings
+        """
+        return len(self.buchungen)
+    
+    def get_current_index(self):
+        """
+        Get current booking index.
+        
+        Returns:
+            int: Current index
+        """
+        return self.index
+    
+    def get_buchungen_by_month(self, year, month):
+        """
+        Get all bookings for a specific month.
+        
+        Args:
+            year: Year (e.g., 2024)
+            month: Month (1-12)
+            
+        Returns:
+            list: List of Buchung objects for the specified month
+        """
+        result = []
+        for buchung_data in self.buchungen:
+            datum = buchung_data.get("datum", "")
+            # Try to parse date in various formats
+            try:
+                # Try YYYY-MM-DD format
+                if "-" in datum:
+                    parts = datum.split("-")
+                    if len(parts) == 3:
+                        b_year = int(parts[0])
+                        b_month = int(parts[1])
+                        if b_year == year and b_month == month:
+                            result.append(Buchung(buchung_data))
+                # Try DD.MM.YY format
+                elif "." in datum:
+                    parts = datum.split(".")
+                    if len(parts) == 3:
+                        b_month = int(parts[1])
+                        b_year = int(parts[2])
+                        # Handle 2-digit year
+                        if b_year < 100:
+                            b_year += 2000
+                        if b_year == year and b_month == month:
+                            result.append(Buchung(buchung_data))
+            except (ValueError, IndexError):
+                pass  # Skip invalid dates
+        return result
+    
+    def get_buchungen_by_year(self, year):
+        """
+        Get all bookings for a specific year.
+        
+        Args:
+            year: Year (e.g., 2024)
+            
+        Returns:
+            list: List of Buchung objects for the specified year
+        """
+        result = []
+        for buchung_data in self.buchungen:
+            datum = buchung_data.get("datum", "")
+            try:
+                # Try YYYY-MM-DD format
+                if "-" in datum:
+                    parts = datum.split("-")
+                    if len(parts) == 3:
+                        b_year = int(parts[0])
+                        if b_year == year:
+                            result.append(Buchung(buchung_data))
+                # Try DD.MM.YY format
+                elif "." in datum:
+                    parts = datum.split(".")
+                    if len(parts) == 3:
+                        b_year = int(parts[2])
+                        # Handle 2-digit year
+                        if b_year < 100:
+                            b_year += 2000
+                        if b_year == year:
+                            result.append(Buchung(buchung_data))
+            except (ValueError, IndexError):
+                pass  # Skip invalid dates
+        return result
