@@ -1,23 +1,23 @@
 """
 Account provider module for accessing account data.
-Abstracts access to account data, initially from konten.py.
+Abstracts access to account data from konten.json.
 """
 
-import sys
+import json
 import os
-
-# Add data directory to path for konten import
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'data'))
-import konten  # Import from legacy konten.py
 
 
 class KontenProvider:
     """Provides access to account data."""
     
-    def __init__(self):
+    def __init__(self, konten_file=None):
         """Initialize account provider."""
-        # Load accounts from legacy konten.py
-        self.konten_liste = konten.konten_liste
+        if konten_file is None:
+            konten_file = os.path.join(os.path.dirname(__file__), '..', 'data', 'konten.json')
+        
+        # Load accounts from konten.json
+        with open(konten_file, 'r', encoding='utf-8') as f:
+            self.konten_liste = json.load(f)
     
     def get_all_konten(self):
         """
