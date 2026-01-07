@@ -16,7 +16,7 @@ except ImportError:
     print("Warning: Could not check libraries. Continuing anyway.")
 
 # Import and run the application
-from buchung import BuchfuehrungApp
+from ui import BuchfuehrungApp
 
 def main():
     """Main entry point."""
