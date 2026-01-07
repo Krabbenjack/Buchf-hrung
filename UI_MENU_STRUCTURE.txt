@@ -1,0 +1,62 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                              Buchführung                                     ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Buchen                    Berichte                                           ║
+║  │                          │                                                ║
+║  ├─ Buchen Bank            ├─ Bericht Gegenkonto                            ║
+║  └─ Buchen Kasse           ├─ Bericht Zusammenfassung                       ║
+║                             ├─ Bericht Sparkasse                             ║
+║                             └─ Bericht Kasse                                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Buchungsdatum: [____________]         Gegenkonto: [1200 - SPK      ▼]     ║
+║                                                                              ║
+║  Beschreibung:  [________________________________________________]           ║
+║                                                                              ║
+║  Kundennummer:  [____________]         Rechnungsnummer: [____________]      ║
+║                                                                              ║
+║  Rechnungsdatum: [____________]                                             ║
+║                                                                              ║
+║  MwSt:          [00▼]                                                       ║
+║                                                                              ║
+║  Konto:         [                                            ]              ║
+║                 [Konto auswählen]                                           ║
+║                                                                              ║
+║  Soll:          [____________]         Haben:   [____________]              ║
+║                                                                              ║
+║  Lfd. Nr.:      [    ]                                                      ║
+║                                                                              ║
+║  [Speichern]    [Vor]    [Zurück]                                          ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Menu Bar Features:
+═══════════════════
+
+1. Buchen Menu:
+   • Buchen Bank - Sets counter account to Bank (1200 - SPK)
+   • Buchen Kasse - Sets counter account to Kasse (1000 - Kasse)
+
+2. Berichte Menu:
+   • Bericht Gegenkonto - Generates counter account report using Steuerberater export
+   • Bericht Zusammenfassung - Generates summary report using ReportGenerator
+   • Bericht Sparkasse - Generates Sparkasse-specific report using Steuerberater export
+   • Bericht Kasse - Generates Kasse-specific report using Steuerberater export
+
+All report menu items will:
+   1. Prompt for year (e.g., 2025)
+   2. Prompt for month (1-12)
+   3. Ask for PDF save location
+   4. Generate and save the PDF report
+
+Counter Account Logic:
+═════════════════════
+
+When "Buchen Bank" is selected:
+   → Gegenkonto dropdown is set to "1200 - SPK"
+   → User sees confirmation message
+
+When "Buchen Kasse" is selected:
+   → Gegenkonto dropdown is set to "1000 - Kasse"
+   → User sees confirmation message
+
