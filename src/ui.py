@@ -213,7 +213,7 @@ class BuchfuehrungApp:
 
         # Row 11: Keyboard shortcuts help text (small, italic)
         shortcuts_text = ("Shortcuts: Enter = next field | ← → = Soll/Haben | "
-                         "Ctrl+# = copy from previous | Ctrl+S = Save | F2 = Account search")
+                         "Ctrl+D = copy from previous | Ctrl+S = Save | F2 = Account search")
         self.shortcuts_label = tk.Label(
             self.root, 
             text=shortcuts_text,
@@ -360,9 +360,9 @@ class BuchfuehrungApp:
         self.soll_entry.bind("<Return>", lambda e: self.confirm_amount_field(e))
         self.haben_entry.bind("<Return>", lambda e: self.confirm_amount_field(e))
         
-        # Ctrl+# to copy from previous booking
-        self.root.bind("<Control-numbersign>", self.copy_from_previous)
-        self.root.bind("<Control-Key-3>", self.copy_from_previous)  # Ctrl+Shift+3 on some keyboards
+        # Ctrl+D to copy from previous booking (more standard than Ctrl+#)
+        self.root.bind("<Control-d>", self.copy_from_previous)
+        self.root.bind("<Control-D>", self.copy_from_previous)
         
         # Ctrl+S to save
         self.root.bind("<Control-s>", lambda e: self.save_buchung())
@@ -392,7 +392,7 @@ class BuchfuehrungApp:
     
     def copy_from_previous(self, event=None):
         """Copy value from the same field in the previous booking."""
-        if self.index <= 0 or not self.manager.buchungen:
+        if self.index < 1 or not self.manager.buchungen:
             return  # No previous booking, do nothing
         
         prev_booking = self.manager.buchungen[self.index - 1]
@@ -560,7 +560,7 @@ class BuchfuehrungApp:
                 konto_full = f'{konto_obj["nummer"]} - {konto_obj["bezeichnung"]}'
             else:
                 konto_full = konto_number
-        except:
+        except ValueError:
             konto_full = konto_number
         
         datum = self.datum_entry.get() or datetime.now().strftime("%Y-%m-%d")
