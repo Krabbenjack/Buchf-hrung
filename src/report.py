@@ -10,7 +10,8 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 
-from buchung import Buchung, BuchungManager
+from buchung_model import Buchung
+from buchung_manager import BuchungManager
 
 
 class ReportGenerator:
